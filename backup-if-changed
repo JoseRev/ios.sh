@@ -1,0 +1,72 @@
+!!!!!! Configuracion en Cisco para realizar respaldos diarios, SOLO en caso de cambios  !!!!!!!
+!!!!!!                                                                                  !!!!!!!
+!!!!!! - archive -> Backup  (para realizar  y organizar los respaldos)                  !!!!!!!
+!!!!!! - ios.sh  -> linuxs commands (para comprobar si hubo cambios)                    !!!!!!!
+!!!!!! - EEM     -> Daily schedule  (para ejecucar diariamente)                         !!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!! Setup environment !!!!!!
+conf t
+shell processing full
+no ip domain lookup 
+line console 0
+logging synchronous
+end
+
+!shell environment load linux_env merge
+X=`sh run | wc | cut -d" "  -f5,10,14 | cut -d" " -f3` 
+backup=flash0:/backup
+linux_env=flash0:/linux_env
+backup_PRE=flash0:/backup/BKP
+
+
+
+!!!!!! Achive !!!!!!
+mkdir $backup 
+
+conf t
+archive 
+path  $backup_PRE 
+end
+archive config
+show archive
+
+
+!!!!!! Shell Functions !!!!!!
+function cambio()
+{ 
+ Y=`sh run | wc | cut -d" "  -f5,10,14 | cut -d" " -f3`
+ if [[ $X -eq $Y ]]
+ then
+ echo "Sin cambio X = $X,  Y = $Y"
+ else
+ echo "Cambio X = $X,  Y = $Y"
+ archive config
+ X=$Y
+ fi
+}
+function vars(){
+sh shell environment | nl | grep -v prc_ | head
+}
+function var(){
+sh shell environment | nl | grep ": X=|: Y=|^2: # User Environment Variables:"
+}
+shell environment save $linux_env
+
+
+!!!!!! EEM !!!!!!
+conf t
+event manager applet APP
+ event timer cron name cronpolicy cron-entry "* * * * *"    
+ action 1.0 cli command "enable"
+ action 2.0 cli command "shell environment load $linux_env merge"  
+ action 3.0 cli command "cambio"
+ action 4.0 cli command "shell environment save $linux_env" pattern "confirm" 
+ action 5.0 cli command "y"
+ action 6.0 syslog msg "Revision de cambios en running-config con exito"
+end
+
+
+!!!!!! Debug !!!!!!
+debug event manager action cli
+shell environment load $linux_env merge
