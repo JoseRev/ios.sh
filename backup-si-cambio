@@ -57,7 +57,7 @@ shell environment save $linux_env
 !!!!!! EEM !!!!!!
 conf t
 event manager applet APP
- event timer cron name cronpolicy cron-entry "* * * * *"    
+ event timer cron name cronpolicy cron-entry "0 22 * * *"    
  action 1.0 cli command "enable"
  action 2.0 cli command "shell environment load $linux_env merge"  
  action 3.0 cli command "cambio"
