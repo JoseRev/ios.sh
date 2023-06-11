@@ -1,9 +1,9 @@
-!!!!!! Configuracion en Cisco para realizar respaldos diarios, SOLO en caso de cambios  !!!!!!!
-!!!!!!                                                                                  !!!!!!!
-!!!!!! - ios.sh  -> Comandos Linux (para comprobar si hubo cambios)                     !!!!!!!
-!!!!!! - EEM     -> Iniciar Script (para ejecutar diariamente)                          !!!!!!!
-!!!!!! - archive -> Backup  (para realizar  y organizar los respaldos)                  !!!!!!!
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+!!!!!! Configuracion en Cisco para respaldar, SOLO en caso de cambios (revisar diariamente)  !!!!!!!
+!!!!!!                                                                                       !!!!!!!
+!!!!!! - ios.sh  -> Comandos Linux (para comprobar si hubo cambios)                          !!!!!!!
+!!!!!! - EEM     -> Iniciar Script (para ejecutar diariamente)                               !!!!!!!
+!!!!!! - archive -> Backup  (para realizar  y organizar los respaldos)                       !!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 !!!!!! Setup environment !!!!!!
 conf t
